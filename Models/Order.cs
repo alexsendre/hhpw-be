@@ -10,7 +10,7 @@
         public string OrderType { get; set; }
         public bool IsClosed { get; set; }
         public decimal Total { get; set; }
-        public DateTime DateClosed { get; set; }
+        public DateTime? DateClosed { get; set; }
         public int PaymentTypeId { get; set; }
     }
 }
