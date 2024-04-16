@@ -12,5 +12,8 @@
         public decimal Total { get; set; }
         public DateTime? DateClosed { get; set; }
         public int PaymentTypeId { get; set; }
+        public ICollection<Item> Items { get; set; }
+        public ICollection<PaymentType> PaymentTypes { get; set; }
+        public ICollection<User> Customer { get; set; }
     }
 }

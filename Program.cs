@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using hhpw_be;
+using hhpw_be.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,5 +50,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+ItemRequests.Map(app);
+OrderRequests.Map(app);
+UserRequests.Map(app);
+PaymentTypeRequests.Map(app);
 
 app.Run();
