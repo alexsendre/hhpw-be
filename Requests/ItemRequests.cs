@@ -8,6 +8,15 @@
             {
                 return db.Items.ToList();
             });
+
+            app.MapGet("/items/{id}", (HHPWDbContext db, int id) =>
+            {
+                var item = db.Items.SingleOrDefault(i => i.Id == id);
+
+                if (item == null) return Results.NotFound();
+
+                return Results.Ok(item);
+            });
         }
     }
 }

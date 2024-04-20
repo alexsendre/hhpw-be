@@ -15,7 +15,7 @@ namespace hhpw_be.Requests
 
             app.MapGet("/orders/{id}", (HHPWDbContext db, int id) =>
             {
-                var order = db.Orders.Include(o => o.Items).SingleOrDefault(o => o.Id == id);
+                var order = db.Orders.Include(o => o.Items).Include(o => o.OrderTypes).SingleOrDefault(o => o.Id == id);
 
                 if (order == null)
                 {
@@ -29,7 +29,11 @@ namespace hhpw_be.Requests
                     status = order.IsClosed,
                     phone = order.CustomerPhone,
                     email = order.CustomerEmail,
-                    type = order.OrderType,
+                    type = order.OrderTypes.Select(type => new
+                    {
+                        id = type.Id,
+                        name = type.Name,
+                    }),
                     items = order.Items.Select(item => new
                     {
                         id = item.Id,
@@ -41,7 +45,29 @@ namespace hhpw_be.Requests
                 return Results.Ok(response);
             });
 
-            app.MapPost("/orders", (HHPWDbContext db, Order newOrder) =>
+            app.MapGet("/orders/{orderId}/items", (HHPWDbContext db, int orderId) =>
+            {
+                var order = db.Orders.Include(o => o.Items).SingleOrDefault(o => o.Id == orderId);
+
+                if (order == null)
+                {
+                    return Results.NotFound();
+                }
+
+                var response = new
+                {
+                    items = order.Items.Select(item => new
+                    {
+                        id = item.Id,
+                        name = item.Name,
+                        price = item.Price,
+                    })
+                };
+
+                return Results.Ok(response);
+            });
+
+            app.MapPost("/orders/new", (HHPWDbContext db, Order newOrder) =>
             {
                 db.Orders.Add(newOrder);
                 db.SaveChanges();
@@ -62,8 +88,26 @@ namespace hhpw_be.Requests
                 return Results.NoContent();
             });
 
+            app.MapPut("/orders/edit/{orderId}", (HHPWDbContext db, int orderId, Order newOrder) =>
+            {
+                var orderToUpdate = db.Orders.SingleOrDefault(o => o.Id == orderId);
+
+                if (orderToUpdate == null)
+                {
+                    return Results.NotFound();
+                }
+
+                orderToUpdate.CustomerName = newOrder.CustomerName;
+                orderToUpdate.CustomerEmail = newOrder.CustomerEmail;
+                orderToUpdate.CustomerPhone = newOrder.CustomerPhone;
+                orderToUpdate.OrderTypeId = newOrder.OrderTypeId;
+
+                db.SaveChanges();
+                return Results.Ok(orderToUpdate) ;
+            });
+
             // add item to cart
-            app.MapPost("/orders/add", (HHPWDbContext db, AddToCartDTO newItem) =>
+            app.MapPost("/orders/{orderId}/add", (HHPWDbContext db, AddToCartDTO newItem) =>
             {
                 var order = db.Orders.Include(o => o.Items).FirstOrDefault(o => o.Id == newItem.OrderId);
                 var itemToAdd = db.Items.Find(newItem.ItemId);

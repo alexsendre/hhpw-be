@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hhpw_be;
@@ -11,9 +12,10 @@ using hhpw_be;
 namespace hhpw_be.Migrations
 {
     [DbContext(typeof(HHPWDbContext))]
-    partial class HHPWDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240419132533_OrderTypes")]
+    partial class OrderTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,8 +99,9 @@ namespace hhpw_be.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("OrderTypeId")
-                        .HasColumnType("integer");
+                    b.Property<string>("OrderType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
@@ -118,9 +121,9 @@ namespace hhpw_be.Migrations
                             CustomerId = 4,
                             CustomerName = "Johnny Faucet",
                             CustomerPhone = "606-600-0006",
-                            DateClosed = new DateTime(2024, 4, 19, 8, 41, 31, 388, DateTimeKind.Local).AddTicks(7791),
+                            DateClosed = new DateTime(2024, 4, 19, 8, 25, 33, 282, DateTimeKind.Local).AddTicks(6711),
                             IsClosed = true,
-                            OrderTypeId = 2,
+                            OrderType = "Walk In",
                             PaymentTypeId = 1,
                             Total = 24.44m
                         },
@@ -132,7 +135,7 @@ namespace hhpw_be.Migrations
                             CustomerName = "Bros Keet",
                             CustomerPhone = "838-830-0006",
                             IsClosed = false,
-                            OrderTypeId = 1,
+                            OrderType = "Call In",
                             PaymentTypeId = 2,
                             Total = 56.44m
                         },
@@ -143,9 +146,9 @@ namespace hhpw_be.Migrations
                             CustomerId = 2,
                             CustomerName = "Jim Jo",
                             CustomerPhone = "002-387-0006",
-                            DateClosed = new DateTime(2024, 4, 19, 8, 41, 31, 388, DateTimeKind.Local).AddTicks(7844),
+                            DateClosed = new DateTime(2024, 4, 19, 8, 25, 33, 282, DateTimeKind.Local).AddTicks(6757),
                             IsClosed = true,
-                            OrderTypeId = 3,
+                            OrderType = "Mobile",
                             PaymentTypeId = 3,
                             Total = 93.44m
                         },
@@ -157,7 +160,7 @@ namespace hhpw_be.Migrations
                             CustomerName = "Greg Gerg",
                             CustomerPhone = "499-399-0006",
                             IsClosed = false,
-                            OrderTypeId = 3,
+                            OrderType = "Call In",
                             PaymentTypeId = 1,
                             Total = 28.44m
                         });
@@ -175,14 +178,9 @@ namespace hhpw_be.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderTypes");
+                    b.ToTable("OrderType");
 
                     b.HasData(
                         new
@@ -327,13 +325,6 @@ namespace hhpw_be.Migrations
                     b.ToTable("OrderUser");
                 });
 
-            modelBuilder.Entity("hhpw_be.Models.OrderType", b =>
-                {
-                    b.HasOne("hhpw_be.Models.Order", null)
-                        .WithMany("OrderTypes")
-                        .HasForeignKey("OrderId");
-                });
-
             modelBuilder.Entity("ItemOrder", b =>
                 {
                     b.HasOne("hhpw_be.Models.Item", null)
@@ -377,11 +368,6 @@ namespace hhpw_be.Migrations
                         .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("hhpw_be.Models.Order", b =>
-                {
-                    b.Navigation("OrderTypes");
                 });
 #pragma warning restore 612, 618
         }

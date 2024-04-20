@@ -9,6 +9,7 @@ namespace hhpw_be
         public DbSet<Order> Orders { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<OrderType> OrderTypes { get; set; }
 
         public HHPWDbContext(DbContextOptions<HHPWDbContext> context) : base(context)
         {
@@ -27,10 +28,10 @@ namespace hhpw_be
 
             modelBuilder.Entity<Order>().HasData(new Order[]
             {
-                new Order { Id = 1, CustomerId = 4, CustomerName = "Johnny Faucet", CustomerEmail = "johnny@faucet.com", CustomerPhone = "606-600-0006", DateClosed = DateTime.Now, IsClosed = true, OrderType = "Walk In", PaymentTypeId = 1, Total = 24.44M },
-                new Order { Id = 2, CustomerId = 3, CustomerName = "Bros Keet", CustomerEmail = "bro@keet.com", CustomerPhone = "838-830-0006", DateClosed = null, IsClosed = false, OrderType = "Call In", PaymentTypeId = 2, Total = 56.44M },
-                new Order { Id = 3, CustomerId = 2, CustomerName = "Jim Jo", CustomerEmail = "jim@jo.com", CustomerPhone = "002-387-0006", DateClosed = DateTime.Now, IsClosed = true, OrderType = "Mobile", PaymentTypeId = 3, Total = 93.44M },
-                new Order { Id = 4, CustomerId = 1, CustomerName = "Greg Gerg", CustomerEmail = "greg@gerg.com", CustomerPhone = "499-399-0006", DateClosed = null, IsClosed = false, OrderType = "Call In", PaymentTypeId = 1, Total = 28.44M },
+                new Order { Id = 1, CustomerId = 4, CustomerName = "Johnny Faucet", CustomerEmail = "johnny@faucet.com", CustomerPhone = "606-600-0006", DateClosed = DateTime.Now, IsClosed = true, OrderTypeId = 2, PaymentTypeId = 1, Total = 24.44M },
+                new Order { Id = 2, CustomerId = 3, CustomerName = "Bros Keet", CustomerEmail = "bro@keet.com", CustomerPhone = "838-830-0006", DateClosed = null, IsClosed = false, OrderTypeId = 1, PaymentTypeId = 2, Total = 56.44M },
+                new Order { Id = 3, CustomerId = 2, CustomerName = "Jim Jo", CustomerEmail = "jim@jo.com", CustomerPhone = "002-387-0006", DateClosed = DateTime.Now, IsClosed = true, OrderTypeId = 3, PaymentTypeId = 3, Total = 93.44M },
+                new Order { Id = 4, CustomerId = 1, CustomerName = "Greg Gerg", CustomerEmail = "greg@gerg.com", CustomerPhone = "499-399-0006", DateClosed = null, IsClosed = false, OrderTypeId = 3, PaymentTypeId = 1, Total = 28.44M },
             });
 
             modelBuilder.Entity<Item>().HasData(new Item[]
@@ -46,6 +47,13 @@ namespace hhpw_be
                 new PaymentType { Id = 1, Name = "Cash" },
                 new PaymentType { Id = 2, Name = "Card" },
                 new PaymentType { Id = 3, Name = "PayPal" }
+            });
+
+            modelBuilder.Entity<OrderType>().HasData(new OrderType[]
+            {
+                new OrderType { Id = 1, Name = "Walk-in" },
+                new OrderType { Id = 2, Name = "Call-in" },
+                new OrderType { Id = 3, Name = "Mobile" }
             });
         }
     }

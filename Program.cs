@@ -55,5 +55,6 @@ ItemRequests.Map(app);
 OrderRequests.Map(app);
 UserRequests.Map(app);
 PaymentTypeRequests.Map(app);
+OrderTypeRequests.Map(app);
 
 app.Run();
